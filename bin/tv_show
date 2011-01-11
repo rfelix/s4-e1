@@ -1,3 +1,20 @@
 #!/usr/bin/env ruby
 
-puts "tv_show help:"
+require 'optparse'
+
+ARGV << "--help" if ARGV.empty?
+
+OptionParser.new do |opts|
+  opts.banner = "Usage: tv_show [tv show name] [options]"
+
+  opts.on("-e", "--episode N", Integer, "Specify episode N") do |n|
+  end
+
+  opts.on("-s", "--season N", Integer, "Specify season N") do |n|
+  end
+
+  opts.on("-t", "--title \"TITLE\"", "Specify episode TITLE") do |t|
+  end
+end.parse!
+
+
