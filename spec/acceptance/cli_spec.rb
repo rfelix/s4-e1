@@ -10,10 +10,14 @@ feature "tv_show CLI" do
       "--episode",
       "--title"
     ]
-    help_topics.each { |topic| output.should include topic }
+    help_topics.each { |topic| output.should include(topic) }
+
+    $?.exitstatus.should == 0
   end
 
-  #scenario "should return Firefly for episode 10 of Fringe season 3" do
-  #  0.should == 1
-  #end
+  scenario "should return Firefly for episode 10 of Fringe season 3" do
+    tv_show_exec.should == "Firefly\n"
+    $?.exitstatus.should == 0
+  end
+
 end
