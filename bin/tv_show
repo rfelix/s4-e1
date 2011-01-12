@@ -1,20 +1,7 @@
 #!/usr/bin/env ruby
 
-require 'optparse'
+$LOAD_PATH.unshift File.join(File.dirname(__FILE__), '..', 'lib')
 
-ARGV << "--help" if ARGV.empty?
+require "tv_show"
 
-OptionParser.new do |opts|
-  opts.banner = "Usage: tv_show [tv show name] [options]"
-
-  opts.on("-e", "--episode N", Integer, "Specify episode N") do |n|
-  end
-
-  opts.on("-s", "--season N", Integer, "Specify season N") do |n|
-  end
-
-  opts.on("-t", "--title \"TITLE\"", "Specify episode TITLE") do |t|
-  end
-end.parse!
-
-
+puts TvShow::Cli.new(ARGV).run
