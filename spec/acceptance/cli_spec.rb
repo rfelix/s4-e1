@@ -1,6 +1,6 @@
 require File.join(File.dirname(__FILE__), 'acceptance_helper.rb')
 
-feature "tv_show CLI" do
+feature "tv_show CLI", :acceptance => true do
 
   scenario "should show help when no arguments passed" do
     output = tv_show_exec
