@@ -8,6 +8,7 @@ module TvShow
       @argv = argv
       @options = {}
       parse_options
+      validate_options
     end
 
     def run
@@ -35,7 +36,17 @@ module TvShow
       end.parse!(@argv)
 
       @options[:show] = @argv.first
-      raise ShowNameMissingException.new if @options[:show].nil?
     end
+
+    def validate_options
+      raise ShowNameMissingException.new if @options[:show].nil?
+
+      raise WrongArgumentOrderException if @options.keys.size == 2 &&
+                                           @options.keys.include?(:episode)
+
+      raise WrongArgumentOrderException if @options.keys.include?(:title) &&
+                                           @options.keys.include?(:episode)
+    end
+
   end
 end

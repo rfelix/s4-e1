@@ -31,11 +31,23 @@ module TvShow
         %w{--season 3 --episode 1}
       ]
 
-      it "should accept just the season argument"
-      it "should accept just the title argument"
-      it "should accept the season and title argument combo"
-      it "should accept the season and episode argument combo"
-      it "should raise an error with the rest of the argument combos"
+      @valid_argument_combos.each do |args|
+        it "should accept the argument combo: '#{args.join(' ')}'" do
+          expect { Cli.new(%w{Fringe} + args) }.to_not raise_error(ShowNameMissingException)
+        end
+      end
+
+      it "should raise an error with just '--episode 1'" do
+        expect { Cli.new %w{Fringe --episode 1} }.to raise_error(WrongArgumentOrderException)
+      end
+
+      it "should raise an error with '--title foo --episode 1'" do
+        expect { Cli.new %w{Fringe --title foo --episode 1} }.to raise_error(WrongArgumentOrderException)
+      end
+
+      it "should raise an error with '--title foo --season 3 --episode 1'" do
+        expect { Cli.new %w{Fringe --season 3 --title foo --episode 1} }.to raise_error(WrongArgumentOrderException)
+      end
     end
   end
 end
