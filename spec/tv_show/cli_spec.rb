@@ -64,5 +64,36 @@ module TvShow
       end
     end
 
+    context "Execution" do
+      it "should get information by season and episode" do
+        the_tv_db = double('TheTvDb')
+        the_tv_db.should_receive(:name_by_episode).with("Fringe", 3, 10)
+
+        Cli.new(%w{Fringe --season 3 --episode 10}).run(the_tv_db)
+      end
+
+      it "should get information by season" do
+        the_tv_db = double('TheTvDb')
+        the_tv_db.should_receive(:list_by_season).with("Fringe", 3)
+
+        Cli.new(%w{Fringe --season 3}).run(the_tv_db)
+      end
+
+      it "should get information by title" do
+        the_tv_db = double('TheTvDb')
+        the_tv_db.should_receive(:episode_by_title).with("Fringe", 'northwest')
+
+        Cli.new(%w{Fringe --title northwest}).run(the_tv_db)
+      end
+
+      it "should get information by title and season" do
+        the_tv_db = double('TheTvDb')
+        the_tv_db.should_receive(:episode_by_title).with("Fringe", 'northwest', 3)
+
+        Cli.new(%w{Fringe --title northwest --season 3}).run(the_tv_db)
+      end
+
+    end
+
   end
 end

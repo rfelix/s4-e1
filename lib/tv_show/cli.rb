@@ -11,7 +11,16 @@ module TvShow
       validate_options
     end
 
-    def run
+    def run(show_info)
+      if @options[:season] && @options[:episode]
+        show_info.name_by_episode(@options[:show], @options[:season], @options[:episode])
+      elsif @options[:title] && @options[:season]
+        show_info.episode_by_title(@options[:show], @options[:title], @options[:season])
+      elsif @options[:season]
+        show_info.list_by_season(@options[:show], @options[:season])
+      elsif @options[:title]
+        show_info.episode_by_title(@options[:show], @options[:title])
+      end
     end
 
     private
