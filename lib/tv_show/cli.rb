@@ -22,14 +22,20 @@ module TvShow
         opts.banner = "Usage: tv_show [tv show name] [options]"
 
         opts.on("-e", "--episode N", Integer, "Specify episode N") do |n|
+          @options[:episode] = n
         end
 
         opts.on("-s", "--season N", Integer, "Specify season N") do |n|
+          @options[:season] = n
         end
 
         opts.on("-t", "--title \"TITLE\"", "Specify episode TITLE") do |t|
+          @options[:title] = t
         end
       end.parse!(@argv)
+
+      @options[:show] = @argv.first
+      raise ShowNameMissingException.new if @options[:show].nil?
     end
   end
 end
