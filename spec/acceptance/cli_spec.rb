@@ -16,7 +16,7 @@ feature "tv_show CLI", :acceptance => true do
   end
 
   scenario "should return Firefly for episode 10 of Fringe season 3" do
-    tv_show_exec.should == "Firefly\n"
+    tv_show_exec("Fringe --season 3 --episode 10").should == "Firefly\n"
     $?.exitstatus.should == 0
   end
 

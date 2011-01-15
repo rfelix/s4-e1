@@ -4,4 +4,10 @@ $LOAD_PATH.unshift File.join(File.dirname(__FILE__), '..', 'lib')
 
 require "tv_show"
 
-puts TvShow::Cli.new(ARGV).run
+api_key = File.readlines(File.join(File.dirname(__FILE__), '..', 'api_key.txt'))[0].strip
+
+puts TvShow::Cli.new(ARGV).run(
+  TvShow::TvDbShowInfo.new(
+    TvShow::TvDbApi.new(api_key)
+  )
+)
