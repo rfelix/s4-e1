@@ -12,17 +12,17 @@ tool will return the season and episode numbers.
     Firefly
 
     $ tv_show "Fringe" --season 3 --title "abducted"
-    Season 3 Episode 7
+    7. The Abducted
 
     $ tv_show "Fringe" --season 2
-    Season 2 Episode 1 A New Day in the Old Town
-    Season 2 Episode 2 Night of Desirable Objects
+    1. A New Day in the Old Town
+    2. Night of Desirable Objects
     (...)
-    Season 2 Episode 21 Northwest Passage
-    Season 2 Episode 22 Over There: Part 1
-    Season 2 Episode 23 Over There: Part 2
+    21. Northwest Passage
+    22. Over There: Part 1
+    23. Over There: Part 2
 
     $ tv_show "Fringe" --title "night"
-    Season 1 Episode 18
-    Season 2 Episode 2
+    1.18. Midnight Episode 18
+    2.2. Night of Desirable Objects
 
