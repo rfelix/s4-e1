@@ -15,7 +15,10 @@ module TvShow
       if @options[:season] && @options[:episode]
         puts show_info.name_by_episode(@options[:show], @options[:season], @options[:episode])
       elsif @options[:title] && @options[:season]
-        show_info.episode_by_title(@options[:show], @options[:title], @options[:season])
+        episodes = show_info.episode_by_title(@options[:show], @options[:title], @options[:season])
+        episodes.each do |ep|
+          puts "#{ep[:number]}. #{ep[:name]}"
+        end
       elsif @options[:season]
         episodes = show_info.list_by_season(@options[:show], @options[:season])
         episodes.each do |ep|

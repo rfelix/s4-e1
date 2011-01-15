@@ -23,5 +23,22 @@ module TvShow
       results
     end
 
+    def episode_by_title(show, title, season = nil)
+      show_id = @tv_db.show_id_for(show)
+      info = @tv_db.show_seasons_info_for(show_id, season)
+
+      results = []
+      info['Data']['Episode'].each do |episode|
+        next if season != nil && episode['SeasonNumber'] != season.to_s
+        next unless episode['EpisodeName'] =~ /#{title}/i
+        results << {
+          :number => episode['EpisodeNumber'],
+          :name => episode['EpisodeName'],
+          :season => episode['EpisodeSeason']
+        }
+      end
+      results
+    end
+
   end
 end

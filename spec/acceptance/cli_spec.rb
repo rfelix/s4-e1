@@ -53,4 +53,9 @@ feature "tv_show CLI", :acceptance => true do
     $?.exitstatus.should == 0
   end
 
+  scenario "should return episode 7 when given a title and season" do
+    tv_show_exec("Fringe --season 3 --title abducted").should == "7. The Abducted\n"
+    $?.exitstatus.should == 0
+  end
+
 end
