@@ -34,7 +34,7 @@ module TvShow
         results << {
           :number => episode['EpisodeNumber'],
           :name => episode['EpisodeName'],
-          :season => episode['EpisodeSeason']
+          :season => episode['SeasonNumber']
         }
       end
       results

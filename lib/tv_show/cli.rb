@@ -25,7 +25,10 @@ module TvShow
           puts "#{ep[:number]}. #{ep[:name]}"
         end
       elsif @options[:title]
-        show_info.episode_by_title(@options[:show], @options[:title])
+        episodes = show_info.episode_by_title(@options[:show], @options[:title])
+        episodes.each do |ep|
+          puts "#{ep[:season]}.#{ep[:number]}. #{ep[:name]}"
+        end
       end
     end
 
