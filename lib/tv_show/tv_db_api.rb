@@ -28,6 +28,11 @@ module TvShow
       resp.parsed_response
     end
 
+    def show_seasons_info_for(show_id, season_num)
+      resp = get("/series/#{show_id}/all/en.xml")
+      resp.parsed_response
+    end
+
     private
 
     def get(url, use_api = true)

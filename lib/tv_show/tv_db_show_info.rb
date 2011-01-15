@@ -11,5 +11,17 @@ module TvShow
       info['Data']['Episode']['EpisodeName']
     end
 
+    def list_by_season(show, season)
+      show_id = @tv_db.show_id_for(show)
+      info = @tv_db.show_seasons_info_for(show_id, season)
+
+      results = []
+      info['Data']['Episode'].each do |episode|
+        next unless episode['SeasonNumber'] == season.to_s
+        results << { :number => episode['EpisodeNumber'], :name => episode['EpisodeName']}
+      end
+      results
+    end
+
   end
 end
