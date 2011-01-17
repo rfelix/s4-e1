@@ -1,4 +1,6 @@
 require File.join(File.dirname(__FILE__), '..', 'spec_helper.rb')
+require 'stringio'
+
 
 module TvShow
   describe Cli do
@@ -67,28 +69,39 @@ module TvShow
     context "Execution" do
       it "should get information by season and episode" do
         the_tv_db = double('TheTvDb')
-        the_tv_db.should_receive(:name_by_episode).with("Fringe", 3, 10)
-
-        Cli.new(%w{Fringe --season 3 --episode 10}).run(the_tv_db)
+        the_tv_db.should_receive(:name_by_episode).with("Fringe", 3, 10).and_return("Firefly")
+        suspend_output do
+          Cli.new(%w{Fringe --season 3 --episode 10}).run(the_tv_db)
+        end
       end
 
       it "should get information by season" do
         the_tv_db = double('TheTvDb')
-        the_tv_db.should_receive(:list_by_season).with("Fringe", 3)
+        the_tv_db.should_receive(:list_by_season).with("Fringe", 3).and_return([{
+          :name => 'Firefly',
+          :number => '10'
+        }])
 
         Cli.new(%w{Fringe --season 3}).run(the_tv_db)
       end
 
       it "should get information by title" do
         the_tv_db = double('TheTvDb')
-        the_tv_db.should_receive(:episode_by_title).with("Fringe", 'northwest')
+        the_tv_db.should_receive(:episode_by_title).with("Fringe", 'northwest').and_return([{
+          :name => 'Northwest Passage',
+          :number => '21',
+          :season => '2'
+        }])
 
         Cli.new(%w{Fringe --title northwest}).run(the_tv_db)
       end
 
       it "should get information by title and season" do
         the_tv_db = double('TheTvDb')
-        the_tv_db.should_receive(:episode_by_title).with("Fringe", 'northwest', 3)
+        the_tv_db.should_receive(:episode_by_title).with("Fringe", 'northwest', 3).and_return([{
+          :name => 'Northwest Passage',
+          :number => '21'
+        }])
 
         Cli.new(%w{Fringe --title northwest --season 3}).run(the_tv_db)
       end

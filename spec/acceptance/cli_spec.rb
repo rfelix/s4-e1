@@ -58,7 +58,7 @@ feature "tv_show CLI", :acceptance => true do
     $?.exitstatus.should == 0
   end
 
-  scenario "should return episode 7 when given a title and season" do
+  scenario "should return only the episodes that contain the specified title" do
     tv_show_exec("Fringe --title night").should == "1.18. Midnight\n2.2. Night of Desirable Objects\n"
     $?.exitstatus.should == 0
   end

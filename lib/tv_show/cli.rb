@@ -12,6 +12,7 @@ module TvShow
     end
 
     def run(show_info)
+
       if @options[:season] && @options[:episode]
         puts show_info.name_by_episode(@options[:show], @options[:season], @options[:episode])
       elsif @options[:title] && @options[:season]
@@ -30,6 +31,10 @@ module TvShow
           puts "#{ep[:season]}.#{ep[:number]}. #{ep[:name]}"
         end
       end
+
+    rescue SocketError
+      puts "Error: Connection to web service failed"
+      exit -1
     end
 
     private
