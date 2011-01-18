@@ -8,7 +8,7 @@ module TvShow
         expect {
           cli = Cli.new(%w{Fringe --season 3})
           cli.run(double('TV Show Info'))
-        }.to_not raise_error(ShowNameMissingException)
+        }.to_not raise_error(ShowNameMissingError)
 
         cli.options[:show].should == "Fringe"
         cli.options[:season].should == 3
@@ -19,7 +19,7 @@ module TvShow
         expect {
           cli = Cli.new(%w{Fringe --title northwest})
           cli.run(double('TV Show Info'))
-        }.to_not raise_error(ShowNameMissingException)
+        }.to_not raise_error(ShowNameMissingError)
 
         cli.options[:show].should == "Fringe"
         cli.options[:title].should == "northwest"
@@ -30,7 +30,7 @@ module TvShow
         expect {
           cli = Cli.new(%w{Fringe --season 3 --title northwest})
           cli.run(double('TV Show Info'))
-        }.to_not raise_error(ShowNameMissingException)
+        }.to_not raise_error(ShowNameMissingError)
 
         cli.options[:show].should == "Fringe"
         cli.options[:season].should == 3
@@ -42,7 +42,7 @@ module TvShow
         expect {
           cli = Cli.new(%w{Fringe --season 3 --episode 1})
           cli.run(double('TV Show Info'))
-        }.to_not raise_error(ShowNameMissingException)
+        }.to_not raise_error(ShowNameMissingError)
 
         cli.options[:show].should == "Fringe"
         cli.options[:season].should == 3
@@ -114,12 +114,10 @@ module TvShow
         status = Cli.new(%w{Fringe --title northwest --season 3}).run(the_tv_db)
         status.should == 0
       end
-
     end
 
-
     context "Errors" do
-      it "should give an error when there is not internet connection" do
+      it "should give an error when there is no internet connection" do
         api_stub = TvShow::TvDbApi.new("API KEY")
         # Make as if HTTParty returned a SocketError
         api_stub.stub(:get).and_raise(SocketError)
@@ -132,7 +130,6 @@ module TvShow
 
         status.should == -1
       end
-
     end
 
   end

@@ -23,8 +23,8 @@ module TvShow
     rescue SocketError
       puts "Error: Connection to web service failed"
       -1 # Error status
-    rescue TvShowException => e
-      puts "Error: #{e.message}"
+    rescue TvShowError => e
+      puts "Error: #{e}"
       -2
     rescue OptionParser::ParseError => p
       puts "Error: #{p}"
@@ -89,14 +89,12 @@ module TvShow
     end
 
     def validate_options
-      raise ShowNameMissingException.new    if @options[:show].nil?
-
-      raise WrongArgumentOrderException.new if @options.keys.size == 2 &&
-                                               @options.keys.include?(:episode)
-
-      raise WrongArgumentOrderException.new if @options.keys.include?(:title) &&
-                                               @options.keys.include?(:episode)
+      if @options[:show].nil?
+        raise ShowNameMissingError, "TV Show name is missing"
+      elsif (@options.keys.size == 2        && @options.keys.include?(:episode)) ||
+            (@options.keys.include?(:title) && @options.keys.include?(:episode))
+        raise WrongArgumentOrderError, "Specified arguments are in wrong order"
+      end
     end
-
   end
 end
