@@ -1,6 +1,4 @@
 require File.join(File.dirname(__FILE__), '..', 'spec_helper.rb')
-require 'stringio'
-
 
 module TvShow
   describe Cli do
@@ -117,7 +115,21 @@ module TvShow
 
 
     context "Errors" do
-      it "should give an error when there is not internet connection"
+      it "should give an error when there is not internet connection" do
+        api_stub = TvShow::TvDbApi.new("API KEY")
+        # Make as if HTTParty returned a SocketError
+        api_stub.stub(:get).and_raise(SocketError)
+
+        status = Cli.new(%w{Fringe --season 3 --episode 10}).run(
+          TvShow::TvDbShowInfo.new(
+             api_stub
+          )
+        )
+
+        status.should == -1
+      end
+
     end
+
   end
 end
