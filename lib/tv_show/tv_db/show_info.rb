@@ -2,19 +2,20 @@ module TvShow
   module TvDb
     class ShowInfo
 
-      def initialize(tv_db_api)
+      def initialize(show, tv_db_api)
+        @show  = show
         @tv_db = tv_db_api
       end
 
-      def name_by_episode(show, season, episode)
-        show_id = @tv_db.show_id_for(show)
-        info = @tv_db.show_info_for(show_id, season, episode)
+      def name_by_episode(season, episode)
+        show_id = @tv_db.show_id(@show)
+        info = @tv_db.show_info(:id => show_id, :season => season, :episode => episode)
         info['Data']['Episode']['EpisodeName']
       end
 
-      def list_by_season(show, season)
-        show_id = @tv_db.show_id_for(show)
-        info = @tv_db.show_seasons_info_for(show_id, season)
+      def list_by_season(season)
+        show_id = @tv_db.show_id(@show)
+        info = @tv_db.season_info(show_id, season)
 
         results = []
         info['Data']['Episode'].each do |episode|
@@ -24,9 +25,9 @@ module TvShow
         results
       end
 
-      def episode_by_title(show, title, season = nil)
-        show_id = @tv_db.show_id_for(show)
-        info = @tv_db.show_seasons_info_for(show_id, season)
+      def episode_by_title(title, season = nil)
+        show_id = @tv_db.show_id(@show)
+        info = @tv_db.season_info(show_id, season)
 
         results = []
         info['Data']['Episode'].each do |episode|

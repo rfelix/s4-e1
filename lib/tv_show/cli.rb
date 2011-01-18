@@ -9,11 +9,14 @@ module TvShow
       @options = {}
     end
 
-    def run(show_info)
+    def run(api_key)
       parse_options
       validate_options
 
-      @show_info = show_info
+      @show_info = TvShow::TvDb::ShowInfo.new(
+        @options[:show],
+        TvShow::TvDb::Client.new(api_key)
+      )
 
       info_by_season_and_episode ||
       info_by_season_and_title   ||
@@ -35,13 +38,13 @@ module TvShow
 
     def info_by_season_and_episode
       return unless @options[:season] && @options[:episode]
-      puts @show_info.name_by_episode(@options[:show], @options[:season], @options[:episode])
+      puts @show_info.name_by_episode(@options[:season], @options[:episode])
       0
     end
 
     def info_by_season_and_title
       return unless @options[:title] && @options[:season]
-      episodes = @show_info.episode_by_title(@options[:show], @options[:title], @options[:season])
+      episodes = @show_info.episode_by_title(@options[:title], @options[:season])
       episodes.each do |ep|
         puts "#{ep[:number]}. #{ep[:name]}"
       end
@@ -50,7 +53,7 @@ module TvShow
 
     def info_by_season
       return unless @options[:season]
-      episodes = @show_info.list_by_season(@options[:show], @options[:season])
+      episodes = @show_info.list_by_season(@options[:season])
       episodes.each do |ep|
         puts "#{ep[:number]}. #{ep[:name]}"
       end
@@ -59,7 +62,7 @@ module TvShow
 
     def info_by_title
       return unless @options[:title]
-      episodes = @show_info.episode_by_title(@options[:show], @options[:title])
+      episodes = @show_info.episode_by_title(@options[:title])
       episodes.each do |ep|
         puts "#{ep[:season]}.#{ep[:number]}. #{ep[:name]}"
       end

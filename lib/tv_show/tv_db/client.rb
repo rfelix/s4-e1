@@ -18,18 +18,22 @@ module TvShow
           :location => cache_dir
       end
 
-      def show_id_for(show_name)
+      def show_id(show_name)
         show_name = URI.escape show_name
         resp = get("/GetSeries.php?seriesname=#{show_name}", false)
         resp.parsed_response['Data']['Series']['id']
       end
 
-      def show_info_for(show_id, season_num, episode_num)
-        resp = get("/series/#{show_id}/default/#{season_num}/#{episode_num}")
+      def show_info(options = {})
+        raise ArgumentError, "options needs :id, :episode, and :season" if !options.include?(:id)     &&
+                                                                           !options.include?(:season) &&
+                                                                           !options.include?(:episode)
+
+        resp = get("/series/#{options[:id]}/default/#{options[:season]}/#{options[:episode]}")
         resp.parsed_response
       end
 
-      def show_seasons_info_for(show_id, season_num)
+      def season_info(show_id, season_num)
         resp = get("/series/#{show_id}/all/en.xml")
         resp.parsed_response
       end
