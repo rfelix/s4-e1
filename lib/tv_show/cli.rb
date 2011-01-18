@@ -13,26 +13,13 @@ module TvShow
     def run(show_info)
       validate_options
 
-      if @options[:season] && @options[:episode]
-        puts show_info.name_by_episode(@options[:show], @options[:season], @options[:episode])
-      elsif @options[:title] && @options[:season]
-        episodes = show_info.episode_by_title(@options[:show], @options[:title], @options[:season])
-        episodes.each do |ep|
-          puts "#{ep[:number]}. #{ep[:name]}"
-        end
-      elsif @options[:season]
-        episodes = show_info.list_by_season(@options[:show], @options[:season])
-        episodes.each do |ep|
-          puts "#{ep[:number]}. #{ep[:name]}"
-        end
-      elsif @options[:title]
-        episodes = show_info.episode_by_title(@options[:show], @options[:title])
-        episodes.each do |ep|
-          puts "#{ep[:season]}.#{ep[:number]}. #{ep[:name]}"
-        end
-      end
+      @show_info = show_info
 
-      0 # Status OK!
+      info_by_season_and_episode ||
+      info_by_season_and_title   ||
+      info_by_season             ||
+      info_by_title
+
     rescue SocketError
       puts "Error: Connection to web service failed"
       -1 # Error status
@@ -42,6 +29,39 @@ module TvShow
     end
 
     private
+
+    def info_by_season_and_episode
+      return unless @options[:season] && @options[:episode]
+      puts @show_info.name_by_episode(@options[:show], @options[:season], @options[:episode])
+      0
+    end
+
+    def info_by_season_and_title
+      return unless @options[:title] && @options[:season]
+      episodes = @show_info.episode_by_title(@options[:show], @options[:title], @options[:season])
+      episodes.each do |ep|
+        puts "#{ep[:number]}. #{ep[:name]}"
+      end
+      0
+    end
+
+    def info_by_season
+      return unless @options[:season]
+      episodes = @show_info.list_by_season(@options[:show], @options[:season])
+      episodes.each do |ep|
+        puts "#{ep[:number]}. #{ep[:name]}"
+      end
+      0
+    end
+
+    def info_by_title
+      return unless @options[:title]
+      episodes = @show_info.episode_by_title(@options[:show], @options[:title])
+      episodes.each do |ep|
+        puts "#{ep[:season]}.#{ep[:number]}. #{ep[:name]}"
+      end
+      0
+    end
 
     def parse_options
       @argv << "--help" if @argv.empty?
