@@ -7,10 +7,10 @@ module TvShow
     def initialize(argv)
       @argv = argv
       @options = {}
-      parse_options
     end
 
     def run(show_info)
+      parse_options
       validate_options
 
       @show_info = show_info
@@ -26,6 +26,9 @@ module TvShow
     rescue TvShowException => e
       puts "Error: #{e.message}"
       -2
+    rescue OptionParser::ParseError => p
+      puts "Error: #{p}"
+      -3
     end
 
     private

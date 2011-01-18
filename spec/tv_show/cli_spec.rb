@@ -7,6 +7,7 @@ module TvShow
         cli = nil
         expect {
           cli = Cli.new(%w{Fringe --season 3})
+          cli.run(double('TV Show Info'))
         }.to_not raise_error(ShowNameMissingException)
 
         cli.options[:show].should == "Fringe"
@@ -17,6 +18,7 @@ module TvShow
         cli = nil
         expect {
           cli = Cli.new(%w{Fringe --title northwest})
+          cli.run(double('TV Show Info'))
         }.to_not raise_error(ShowNameMissingException)
 
         cli.options[:show].should == "Fringe"
@@ -27,6 +29,7 @@ module TvShow
         cli = nil
         expect {
           cli = Cli.new(%w{Fringe --season 3 --title northwest})
+          cli.run(double('TV Show Info'))
         }.to_not raise_error(ShowNameMissingException)
 
         cli.options[:show].should == "Fringe"
@@ -38,6 +41,7 @@ module TvShow
         cli = nil
         expect {
           cli = Cli.new(%w{Fringe --season 3 --episode 1})
+          cli.run(double('TV Show Info'))
         }.to_not raise_error(ShowNameMissingException)
 
         cli.options[:show].should == "Fringe"
