@@ -3,8 +3,8 @@ require 'bundler/setup'
 Bundler.require
 
 require 'tv_show/cli'
-require 'tv_show/tv_db_show_info'
-require 'tv_show/tv_db_api'
+require 'tv_show/tv_db/client'
+require 'tv_show/tv_db/show_info'
 
 module TvShow
   TvShowError             = Class.new(StandardError)

@@ -118,12 +118,12 @@ module TvShow
 
     context "Errors" do
       it "should give an error when there is no internet connection" do
-        api_stub = TvShow::TvDbApi.new("API KEY")
+        api_stub = TvShow::TvDb::Client.new("API KEY")
         # Make as if HTTParty returned a SocketError
         api_stub.stub(:get).and_raise(SocketError)
 
         status = Cli.new(%w{Fringe --season 3 --episode 10}).run(
-          TvShow::TvDbShowInfo.new(
+          TvShow::TvDb::ShowInfo.new(
              api_stub
           )
         )

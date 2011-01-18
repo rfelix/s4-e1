@@ -8,8 +8,8 @@ require "tv_show"
 api_key = File.readlines(File.join(File.dirname(__FILE__), '..', 'api_key.txt'))[0].strip
 
 result = TvShow::Cli.new(ARGV).run(
-  TvShow::TvDbShowInfo.new(
-    TvShow::TvDbApi.new(api_key)
+  TvShow::TvDb::ShowInfo.new(
+    TvShow::TvDb::Client.new(api_key)
   )
 )
 
