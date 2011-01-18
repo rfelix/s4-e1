@@ -1,5 +1,5 @@
 require 'httparty'
-require 'icebox'
+require 'httparty_icebox'
 require 'uri'
 
 module TvShow
