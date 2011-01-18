@@ -50,19 +50,23 @@ module TvShow
 
     context "Invalid Arguments" do
       it "should give an error when show name is not specified" do
-        expect { Cli.new(%w{--season 3 --episode 2}) }.to raise_error(ShowNameMissingException)
+        status = Cli.new(%w{--season 3 --episode 2}).run(nil)
+        status.should == -2
       end
 
       it "should raise an error with just '--episode 1'" do
-        expect { Cli.new %w{Fringe --episode 1} }.to raise_error(WrongArgumentOrderException)
+        status = Cli.new(%w{Fringe --episode 1}).run(nil)
+        status.should == -2
       end
 
       it "should raise an error with '--title foo --episode 1'" do
-        expect { Cli.new %w{Fringe --title foo --episode 1} }.to raise_error(WrongArgumentOrderException)
+        status = Cli.new(%w{Fringe --title foo --episode 1}).run(nil)
+        status.should == -2
       end
 
       it "should raise an error with '--title foo --season 3 --episode 1'" do
-        expect { Cli.new %w{Fringe --season 3 --title foo --episode 1} }.to raise_error(WrongArgumentOrderException)
+        status = Cli.new(%w{Fringe --season 3 --title foo --episode 1}).run(nil)
+        status.should == -2
       end
     end
 
@@ -70,9 +74,9 @@ module TvShow
       it "should get information by season and episode" do
         the_tv_db = double('TheTvDb')
         the_tv_db.should_receive(:name_by_episode).with("Fringe", 3, 10).and_return("Firefly")
-        suspend_output do
-          Cli.new(%w{Fringe --season 3 --episode 10}).run(the_tv_db)
-        end
+
+        status = Cli.new(%w{Fringe --season 3 --episode 10}).run(the_tv_db)
+        status.should == 0
       end
 
       it "should get information by season" do
@@ -82,7 +86,8 @@ module TvShow
           :number => '10'
         }])
 
-        Cli.new(%w{Fringe --season 3}).run(the_tv_db)
+        status = Cli.new(%w{Fringe --season 3}).run(the_tv_db)
+        status.should == 0
       end
 
       it "should get information by title" do
@@ -93,7 +98,8 @@ module TvShow
           :season => '2'
         }])
 
-        Cli.new(%w{Fringe --title northwest}).run(the_tv_db)
+        status = Cli.new(%w{Fringe --title northwest}).run(the_tv_db)
+        status.should == 0
       end
 
       it "should get information by title and season" do
@@ -103,10 +109,15 @@ module TvShow
           :number => '21'
         }])
 
-        Cli.new(%w{Fringe --title northwest --season 3}).run(the_tv_db)
+        status = Cli.new(%w{Fringe --title northwest --season 3}).run(the_tv_db)
+        status.should == 0
       end
 
     end
 
+
+    context "Errors" do
+      it "should give an error when there is not internet connection"
+    end
   end
 end

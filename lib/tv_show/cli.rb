@@ -8,10 +8,10 @@ module TvShow
       @argv = argv
       @options = {}
       parse_options
-      validate_options
     end
 
     def run(show_info)
+      validate_options
 
       if @options[:season] && @options[:episode]
         puts show_info.name_by_episode(@options[:show], @options[:season], @options[:episode])
@@ -32,9 +32,13 @@ module TvShow
         end
       end
 
+      0 # Status OK!
     rescue SocketError
       puts "Error: Connection to web service failed"
-      exit -1
+      -1 # Error status
+    rescue TvShowException => e
+      puts "Error: #{e.message}"
+      -2
     end
 
     private
@@ -62,13 +66,13 @@ module TvShow
     end
 
     def validate_options
-      raise ShowNameMissingException.new if @options[:show].nil?
+      raise ShowNameMissingException.new    if @options[:show].nil?
 
-      raise WrongArgumentOrderException if @options.keys.size == 2 &&
-                                           @options.keys.include?(:episode)
+      raise WrongArgumentOrderException.new if @options.keys.size == 2 &&
+                                               @options.keys.include?(:episode)
 
-      raise WrongArgumentOrderException if @options.keys.include?(:title) &&
-                                           @options.keys.include?(:episode)
+      raise WrongArgumentOrderException.new if @options.keys.include?(:title) &&
+                                               @options.keys.include?(:episode)
     end
 
   end
