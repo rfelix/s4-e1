@@ -10,7 +10,7 @@ module TvShow
       def name_by_episode(season, episode)
         show_id = @tv_db.show_id(@show)
         info = @tv_db.show_info(:id => show_id, :season => season, :episode => episode)
-        info['Data']['Episode']['EpisodeName']
+        info['EpisodeName']
       end
 
       def list_by_season(season)
@@ -18,8 +18,7 @@ module TvShow
         info = @tv_db.season_info(show_id, season)
 
         results = []
-        info['Data']['Episode'].each do |episode|
-          next unless episode['SeasonNumber'] == season.to_s
+        info["Season#{season}"].each do |episode|
           results << { :number => episode['EpisodeNumber'], :name => episode['EpisodeName']}
         end
         results
@@ -28,16 +27,23 @@ module TvShow
       def episode_by_title(title, season = nil)
         show_id = @tv_db.show_id(@show)
         info = @tv_db.season_info(show_id, season)
-
         results = []
-        info['Data']['Episode'].each do |episode|
-          next if season != nil && episode['SeasonNumber'] != season.to_s
-          next unless episode['EpisodeName'] =~ /#{title}/i
-            results << {
-            :number => episode['EpisodeNumber'],
-            :name => episode['EpisodeName'],
-            :season => episode['SeasonNumber']
-          }
+
+        if season.nil?
+          seasons = info.keys
+        else
+          seasons = info.keys.select {|s| s == "Season#{season}" }
+        end
+
+        seasons.each do |season_number|
+          info[season_number].each do |episode|
+            next unless episode['EpisodeName'] =~ /#{title}/i
+              results << {
+              :number => episode['EpisodeNumber'],
+              :name   => episode['EpisodeName'],
+              :season => episode['SeasonNumber']
+            }
+          end
         end
         results
       end

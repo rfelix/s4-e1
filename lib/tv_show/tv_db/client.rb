@@ -21,6 +21,7 @@ module TvShow
       def show_id(show_name)
         show_name = URI.escape show_name
         resp = get("/GetSeries.php?seriesname=#{show_name}", false)
+        # TODO: This can have more than one tv series id
         resp.parsed_response['Data']['Series']['id']
       end
 
@@ -30,12 +31,12 @@ module TvShow
                                                                            !options.include?(:episode)
 
         resp = get("/series/#{options[:id]}/default/#{options[:season]}/#{options[:episode]}")
-        resp.parsed_response
+        resp.parsed_response['Data']['Episode']
       end
 
       def season_info(show_id, season_num)
         resp = get("/series/#{show_id}/all/en.xml")
-        resp.parsed_response
+        structure_season_info(resp.parsed_response)
       end
 
       private
@@ -45,6 +46,20 @@ module TvShow
           base_url = use_api ? @base_api_url : @base_url
         self.class.get "#{base_url}#{url}"
       end
+
+      def structure_season_info(parsed_response)
+        structured = {}
+        parsed_response['Data']['Episode'].each do |episode_info|
+          season_info  = structured["Season#{episode_info['SeasonNumber']}"] ||= []
+          season_info << {
+            "EpisodeName"   => episode_info['EpisodeName'],
+            "EpisodeNumber" => episode_info['EpisodeNumber'],
+            "SeasonNumber"  => episode_info['SeasonNumber']
+          }
+        end
+        structured
+      end
     end
+
   end
 end
