@@ -63,4 +63,21 @@ feature "tv_show CLI", :acceptance => true do
     $?.exitstatus.should == 0
   end
 
+  scenario "should allow user to choose tv show when there are various possibilities for chosen name"
+  scenario "should allow user to pass API KEY via the command line"
+  scenario "should allow user to specify file that contains API KEY"
+
+  context "Non Happy Path" do
+    scenario "should let user know that episode information wasn't found for wrong episode" do
+      pending
+      output = tv_show_exec "Fringe --season 1 --episode 30"
+      output.should include("No episode information found")
+
+      $?.exitstatus.should == 0
+    end
+
+    scenario "should let user know that episode information wasn't found for wrong season"
+    scenario "should let user know that tv show name wasn't found"
+  end
+
 end
