@@ -18,6 +18,8 @@ module TvShow
         info = @tv_db.season_info(show_id, season)
 
         results = []
+        return results unless info.include? "Season#{season}"
+
         info["Season#{season}"].each do |episode|
           results << { :number => episode['EpisodeNumber'], :name => episode['EpisodeName']}
         end

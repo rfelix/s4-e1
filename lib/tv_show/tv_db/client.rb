@@ -31,7 +31,11 @@ module TvShow
                                                                            !options.include?(:episode)
 
         resp = get("/series/#{options[:id]}/default/#{options[:season]}/#{options[:episode]}")
-        resp.parsed_response['Data']['Episode']
+        if resp.code == 404
+          { 'EpisodeName' => '' }
+        else
+          resp.parsed_response['Data']['Episode']
+        end
       end
 
       def season_info(show_id, season_num)
